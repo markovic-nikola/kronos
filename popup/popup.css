@@ -1,0 +1,63 @@
+hr {
+    border-style: solid;
+    border-bottom: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-color: #e4e4e4;
+    margin-bottom: 10px;
+}
+
+#timer {
+    font-size: 24px;
+    text-align: center;
+}
+
+#actions {
+    width: 150px;
+    text-align: center;
+}
+
+#actions button {
+    border: none;
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 16px;
+    cursor: pointer;
+    outline: none;
+    -webkit-transition: border 0.2s ease;
+    -o-transition: border 0.2s ease;
+    transition: border 0.2s ease;
+    background-color: #fff;
+    border: 2px solid #e2e2e2;
+}
+
+#actions button[name="stop"]:hover, #actions button[name="stop"]:focus {
+    border-color: #e74c3c;
+}
+
+#actions button[name="play"]:hover, #actions button[name="play"]:focus {
+    border-color: #3498db;
+}
+
+#actions button[name="pause"]:hover, #actions button[name="pause"]:focus {
+    border-color: #f39c12;
+}
+
+#actions button[name="stop"] {
+    background-image: url(../assets/stop.png);
+    margin-right: 5px;
+}
+
+#actions button[name="play"] {
+    background-image: url(../assets/play.png);
+    background-position-x: 60%;
+    margin-left: 5px;
+}
+
+#actions button[name="pause"] {
+    background-image: url(../assets/pause.png);
+    margin-left: 5px;
+}
