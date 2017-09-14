@@ -2,9 +2,11 @@
 Simple tool for tracking your working time.
 
 ## Relese notes
+### v0.4
+- [ ] Save multiple time logs
+
 ### v0.3
 - [ ] Keyboard shortcuts
-- [ ] Save multiple time logs
 
 ### v0.2
 - [x] Auto saves
