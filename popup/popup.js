@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var a = document.createElement('a');
         var text = "Extension has been upgraded to verions: " + version;
         a.appendChild(document.createTextNode(text)).title = text;
-        a.href = "https://markovic-nikola.github.io/kronos/#" + version.replace('.', '-');
+        a.href = "https://markovic-nikola.github.io/kronos/#v" + version.replace('.', '');
         document.getElementById('news').appendChild(a);
 
         a.addEventListener('click', function(event) {
