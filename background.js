@@ -35,6 +35,7 @@ var Timer = function() {
 		if (that.time > 0) {
 			chrome.browserAction.setBadgeText({text: that.formatCurrentHumanTime()});
 		}
+		that.saveTime(that.time);
     },
 
 	this.formatTime = function(time) {
@@ -94,7 +95,7 @@ var Timer = function() {
     }
 
     this.saveTime = function(time) {
-        chrome.storage.sync.set({'time': that.time});
+        chrome.storage.sync.set({'time': time});
     }
 
 	this.round = function(value) {
