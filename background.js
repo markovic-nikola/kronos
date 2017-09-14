@@ -5,6 +5,8 @@ var Timer = function() {
 	this.interval = null,
     this.running = false,
     this.port = null,
+	this.audio = new Audio(),
+	this.extensionUpdated = null,
 
 	this.setTime = function(time) {
 		that.time = time;
@@ -26,16 +28,18 @@ var Timer = function() {
 	},
 
     this.update = function() {
-        if (that.port) {
-            that.port.postMessage({
-                time: that.getCurrentFormattedTime(),
-				isRunning: that.running
-            });
-        }
+
+		that.playReminderSound();
+		that.saveTime(that.time);
+		that.sendMessage({
+			time: that.getCurrentFormattedTime(),
+			isRunning: that.running
+		});
+
 		if (that.time > 0) {
 			chrome.browserAction.setBadgeText({text: that.formatCurrentHumanTime()});
 		}
-		that.saveTime(that.time);
+
     },
 
 	this.formatTime = function(time) {
@@ -74,7 +78,7 @@ var Timer = function() {
 
 	this.formatCurrentHumanTime = function() {
 		return that.formatHumanTime(that.time);
-	}
+	},
 
 	this.pause = function() {
 		clearInterval(that.interval);
@@ -87,16 +91,16 @@ var Timer = function() {
 		that.setTime(0);
 		chrome.browserAction.setBadgeText({text: ''});
 		chrome.storage.sync.clear();
-	}
+	},
 
     this.setRunning = function(value) {
         that.running = value;
         chrome.storage.sync.set({'isTimerRunning': value});
-    }
+    },
 
     this.saveTime = function(time) {
         chrome.storage.sync.set({'time': time});
-    }
+    },
 
 	this.round = function(value) {
 		if (value >= 10) {
@@ -104,7 +108,7 @@ var Timer = function() {
 		} else {
 		return value.toFixed(1);
 		}
-	}
+	},
 
 	this.syncInitialTime = function() {
 		chrome.storage.sync.get('time', function(obj) {
@@ -113,13 +117,33 @@ var Timer = function() {
 			}
 			that.update();
 		});
+	},
+
+	this.playReminderSound = function() {
+		if (that.time === 1800 || (that.time % 3600 === 0 && that.time !== 0)) {
+			that.audio.play();
+		}
+	},
+
+	this.sendMessage = function(obj) {
+		if (that.port) {
+			that.port.postMessage(obj);
+		}
+	},
+
+	this.checkExtensionUpdate = function() {
+		that.sendMessage({
+			extensionUpdated: that.extensionUpdated
+		})
 	}
 
+	// init channel connection with popup
     chrome.runtime.onConnect.addListener(function(port) {
         that.port = port;
         port.onMessage.addListener(function(msg) {
 
-			if (msg.action) {
+			var callable_actions = ['play', 'pause', 'stop', 'update', 'checkExtensionUpdate'];
+			if (msg.action && callable_actions.includes(msg.action)) {
 				that[msg.action]();
 			}
 
@@ -130,7 +154,17 @@ var Timer = function() {
         });
     });
 
+	// first run after install/update
+	chrome.runtime.onInstalled.addListener(function(details){
+	    if (details.reason == "install") {} else if (details.reason == "update") {
+			that.extensionUpdated = chrome.runtime.getManifest().version;
+			chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
+			chrome.browserAction.setBadgeText({text: 'New'});
+	    }
+	});
+
 	chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
+	this.audio.src = "assets/beep.mp3";
 	this.syncInitialTime();
 
 }

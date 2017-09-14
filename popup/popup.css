@@ -1,3 +1,7 @@
+a {
+    color: #9719f0;
+}
+
 hr {
     border-style: solid;
     border-bottom: 0px;
@@ -60,4 +64,10 @@ hr {
 #actions button[name="pause"] {
     background-image: url(../assets/pause.png);
     margin-left: 5px;
+}
+
+#news {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 10px;
 }
