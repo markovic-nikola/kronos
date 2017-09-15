@@ -13,4 +13,4 @@ Simple tool for tracking your working time.
 - [x] Sound reminders
 
 ### v0.1
-- Init
+- [x] Init
