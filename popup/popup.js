@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showUpdateLink(version) {
         var a = document.createElement('a');
-        var text = "Extension has been upgraded to verions: " + version;
+        var text = "Extension has been upgraded to version: " + version;
         a.appendChild(document.createTextNode(text)).title = text;
         a.href = "https://markovic-nikola.github.io/kronos/#v" + version.replace('.', '');
         document.getElementById('news').appendChild(a);
