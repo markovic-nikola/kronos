@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Kronos Timer",
-    "version": "0.2",
+    "version": "0.3",
     "description": "Simple tool for tracking your working time.",
     "author": "Nikola Markovic",
     "icons": {
@@ -30,5 +30,21 @@
         "persistent": false
     },
     "offline_enabled": true,
-    "options_page": "options/options.html"
+    "options_page": "options/options.html",
+    "commands": {
+        "play_pause": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+Space",
+                "mac": "Command+Shift+Space"
+            },
+            "description": "Play/pause timer"
+        },
+        "stop": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+X",
+                "mac": "Command+Shift+X"
+            },
+            "description": "Stop timer"
+        }
+    }
 }

@@ -83,7 +83,7 @@ var Timer = function() {
 	this.pause = function() {
 		clearInterval(that.interval);
         that.setRunning(false);
-        that.saveTime(that.time);
+        that.update();
 	},
 
 	this.stop = function() {
@@ -161,6 +161,15 @@ var Timer = function() {
 			chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
 			chrome.browserAction.setBadgeText({text: 'New'});
 	    }
+	});
+
+	// keyboard shortcuts
+	chrome.commands.onCommand.addListener(function(command) {
+	    if (command == 'play_pause') {
+			that.running ? that.pause() : that.play();
+		} else if (command == 'stop') {
+			that.stop();
+		}
 	});
 
 	chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
