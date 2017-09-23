@@ -1,7 +1,7 @@
 # kronos
 Simple tool for tracking your working time.
 
-Chrome webstore: https://chrome.google.com/webstore/detail/kronos-timer/lbogpmhokkbbcfjabeibelaagefkbfca
+[Install from Chrome webstore](https://chrome.google.com/webstore/detail/kronos-timer/lbogpmhokkbbcfjabeibelaagefkbfca)
 
 ## Keyboard shortcuts
 - **Play/pause**
