@@ -5,7 +5,7 @@ var Timer = function() {
 	this.interval = null,
     this.running = false,
     this.port = null,
-	this.audio = new Audio(),
+	this.audio = null,
 	this.extensionUpdated = null,
 
 	this.setTime = function(time) {
@@ -15,7 +15,7 @@ var Timer = function() {
 
 	this.play = function() {
 
-        if (that.running) {
+        if (that.isRunning()) {
             return;
         }
 
@@ -29,12 +29,13 @@ var Timer = function() {
 
     this.update = function() {
 
-		that.playReminderSound();
-		that.saveTime(that.time);
 		that.sendMessage({
 			time: that.getCurrentFormattedTime(),
-			isRunning: that.running
+			isRunning: that.isRunning()
 		});
+
+		that.playReminderSound();
+		that.saveTime(that.time);
 
 		if (that.time > 0) {
 			chrome.browserAction.setBadgeText({text: that.formatCurrentHumanTime()});
@@ -90,16 +91,22 @@ var Timer = function() {
 		that.pause();
 		that.setTime(0);
 		chrome.browserAction.setBadgeText({text: ''});
-		chrome.storage.sync.clear();
+		chrome.storage.sync.remove('time');
 	},
 
     this.setRunning = function(value) {
         that.running = value;
-        chrome.storage.sync.set({'isTimerRunning': value});
     },
 
-    this.saveTime = function(time) {
-        chrome.storage.sync.set({'time': time});
+	this.isRunning = function() {
+		return that.running;
+	},
+
+    this.saveTime = function(time, strict) {
+		// if it's not strict saving then save every 3 seconds -> escape quota limit
+		if (strict || time % 3 == 0) {
+			chrome.storage.sync.set({'time': time});
+		}
     },
 
 	this.round = function(value) {
@@ -121,7 +128,11 @@ var Timer = function() {
 
 	this.playReminderSound = function() {
 		if (that.time === 1800 || (that.time % 3600 === 0 && that.time !== 0)) {
-			that.audio.play();
+			chrome.storage.sync.get('sound_option', function(obj) {
+				that.audio = new Audio();
+			    that.audio.src = "/assets/" + (obj.sound_option ? obj.sound_option : "beep") + ".mp3";
+				that.audio.play();
+			});
 		}
 	},
 
@@ -166,14 +177,13 @@ var Timer = function() {
 	// keyboard shortcuts
 	chrome.commands.onCommand.addListener(function(command) {
 	    if (command == 'play_pause') {
-			that.running ? that.pause() : that.play();
+			that.isRunning() ? that.pause() : that.play();
 		} else if (command == 'stop') {
 			that.stop();
 		}
 	});
 
 	chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
-	this.audio.src = "assets/beep.mp3";
 	this.syncInitialTime();
 
 }

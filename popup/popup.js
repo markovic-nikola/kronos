@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     port.postMessage({
         action: 'checkExtensionUpdate'
     });
-    
+
     chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
     var manifest = chrome.runtime.getManifest();
     var $stopBtn = document.querySelector('#stop');
