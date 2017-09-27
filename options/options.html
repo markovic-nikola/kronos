@@ -2,11 +2,12 @@
 <html>
     <head>
         <link rel="stylesheet" href="options.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     </head>
     <body>
         <h1>Options</h1>
         <hr>
-        <div>
+        <div class="pl15">
             <h2>Sound</h2>
             <label for="sound">Select sound notification</label>
             <select name="sound_option" id="sound" class="option">
@@ -16,6 +17,19 @@
                 <option value="wood_plank">Wood plank</option>
             </select>
             <button id="sound_btn">Test</button>
+        </div>
+        <br><hr>
+        <div class="pl15">
+            <h2>Labels</h2>
+            <button id="add_label">Add new</button>
+            <small>Max. 5</small>
+            <div id="labels"></div>
+        </div>
+        <br><hr>
+        <div class="pl15">
+            <h2>Reset</h2>
+            <p class="text-danger">This action will reset all your options to default values and logged times!</p>
+            <button id="reset_btn">Reset</button>
         </div>
     </body>
     <script src="options.js" type="text/javascript"></script>

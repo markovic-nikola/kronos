@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Kronos Timer",
-    "version": "0.4",
+    "version": "0.5",
     "description": "Simple tool for tracking your working time.",
     "author": "Nikola Markovic",
     "icons": {
@@ -20,7 +20,7 @@
                 "48": "assets/icon_play_48.png",
                 "128": "assets/icon_play_128.png"
             },
-        "default_title": "Kronos - click to start/pause.",
+        "default_title": "Kronos - track your time.",
         "default_popup": "popup/popup.html"
     },
     "background": {

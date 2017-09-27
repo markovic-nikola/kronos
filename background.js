@@ -31,7 +31,8 @@ var Timer = function() {
 
 		that.sendMessage({
 			time: that.getCurrentFormattedTime(),
-			isRunning: that.isRunning()
+			isRunning: that.isRunning(),
+			timeRaw: that.time
 		});
 
 		that.playReminderSound();
@@ -40,7 +41,7 @@ var Timer = function() {
 		if (that.time > 0) {
 			chrome.browserAction.setBadgeText({text: that.formatCurrentHumanTime()});
 		}
-
+		
     },
 
 	this.formatTime = function(time) {
