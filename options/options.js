@@ -161,8 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    debug_storage();
-
     function debug_storage() {
         chrome.storage.sync.get(function(result){
             console.log(result);
