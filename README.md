@@ -13,7 +13,7 @@ Simple tool for tracking your working time.
 
 ## Relese notes
 ### v0.5
-- [ ] Save multiple time logs
+- [x] Save multiple time logs
 
 ### v0.4
 - [x] Sound notification options
