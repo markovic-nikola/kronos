@@ -41,7 +41,7 @@ var Timer = function() {
 		if (that.time > 0) {
 			chrome.browserAction.setBadgeText({text: that.formatCurrentHumanTime()});
 		}
-		
+
     },
 
 	this.formatTime = function(time) {
@@ -167,12 +167,14 @@ var Timer = function() {
     });
 
 	// first run after install/update
-	chrome.runtime.onInstalled.addListener(function(details){
+	chrome.runtime.onInstalled.addListener(function(details) {
 	    if (details.reason == "install") {} else if (details.reason == "update") {
 			that.extensionUpdated = chrome.runtime.getManifest().version;
 			chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
 			chrome.browserAction.setBadgeText({text: 'New'});
-	    }
+	    } else {
+			that.update();
+		}
 	});
 
 	// keyboard shortcuts

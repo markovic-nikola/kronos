@@ -91,7 +91,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!obj.labels || Object.keys(obj.labels).length == 0) {
             var li = document.createElement('LI');
             li.setAttribute('class', 'text-danger');
-            li.appendChild(document.createTextNode('Empty! Right click on extension -> Options -> Add labels.'));
+            var options_link = document.createElement('A');
+            options_link.appendChild(document.createTextNode('Empty! Add labels.'));
+            options_link.href = '#';
+            options_link.addEventListener('click', function(event) {
+                chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
+            });
+            li.appendChild(options_link);
             li.style.textAlign = 'center';
             ul.appendChild(li);
         } else {
