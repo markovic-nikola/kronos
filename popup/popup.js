@@ -8,8 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
     port.postMessage({
         action: 'checkExtensionUpdate'
     });
+    port.postMessage({
+        action: 'checkTimerLimitReached'
+    });
 
-    chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
+    chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
     var manifest = chrome.runtime.getManifest();
     var $stopBtn = document.querySelector('#stop');
     var $playPauseBtn = document.querySelector('#play_pause');
@@ -18,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
         port.postMessage({
             action: "stop"
         });
-        document.getElementById('play_pause').setAttribute('name', 'play');
+        $playPauseBtn.setAttribute('name', 'play');
+        $playPauseBtn.disabled = false;
     });
     $stopBtn.setAttribute('title', manifest.commands.stop.suggested_key.default);
 
@@ -60,6 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (msg.extensionUpdated) {
             showUpdateLink(msg.extensionUpdated);
+        }
+
+        if (msg.timerLimitReached !== null && typeof msg.timerLimitReached !== 'undefined') {
+            $playPauseBtn.disabled = msg.timerLimitReached;
         }
 
     });

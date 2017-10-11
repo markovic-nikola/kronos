@@ -12,8 +12,11 @@ Simple tool for tracking your working time.
     - Mac: `Command + Shift + X`
 
 ## Relese notes
+#### v0.7
+- [x] Timer limit option
+
 #### v0.6
-- [x] Label options [improvement](https://github.com/markovic-nikola/kronos/issues/6)
+- [x] Label options
 
 #### v0.5
 - [x] Save multiple time logs

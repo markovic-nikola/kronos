@@ -172,4 +172,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return document.querySelectorAll('.label_row').length >= max_labels;
     }
 
+    document.getElementById('time_limit').addEventListener('change', function(event) {
+        chrome.storage.sync.set({'time_limit_option': parseFloat(this.value)});
+    });
+
 });

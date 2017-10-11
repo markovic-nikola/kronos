@@ -7,6 +7,7 @@ var Timer = function() {
     this.port = null,
 	this.audio = null,
 	this.extensionUpdated = null,
+	this.limitReached = false,
 
 	this.setTime = function(time) {
 		that.time = time;
@@ -15,7 +16,7 @@ var Timer = function() {
 
 	this.play = function() {
 
-        if (that.isRunning()) {
+        if (that.isRunning() || that.limitReached) {
             return;
         }
 
@@ -35,12 +36,9 @@ var Timer = function() {
 			timeRaw: that.time
 		});
 
-		that.playReminderSound();
 		that.saveTime(that.time);
-
-		if (that.time > 0) {
-			chrome.browserAction.setBadgeText({text: that.formatCurrentHumanTime()});
-		}
+		chrome.browserAction.setBadgeText({text: (that.time > 0 ? that.formatCurrentHumanTime() : '')});
+		that.checkTimerLimitReached();
 
     },
 
@@ -91,6 +89,8 @@ var Timer = function() {
 	this.stop = function() {
 		that.pause();
 		that.setTime(0);
+		that.limitReached = false;
+		that.checkTimerLimitReached();
 		chrome.browserAction.setBadgeText({text: ''});
 		chrome.storage.sync.remove('time');
 	},
@@ -128,13 +128,11 @@ var Timer = function() {
 	},
 
 	this.playReminderSound = function() {
-		if (that.time === 1800 || (that.time % 3600 === 0 && that.time !== 0)) {
-			chrome.storage.sync.get('sound_option', function(obj) {
-				that.audio = new Audio();
-			    that.audio.src = "/assets/" + (obj.sound_option ? obj.sound_option : "beep") + ".mp3";
-				that.audio.play();
-			});
-		}
+		chrome.storage.sync.get('sound_option', function(obj) {
+			that.audio = new Audio();
+			that.audio.src = "/assets/" + (obj.sound_option ? obj.sound_option : "beep") + ".mp3";
+			that.audio.play();
+		});
 	},
 
 	this.sendMessage = function(obj) {
@@ -146,15 +144,30 @@ var Timer = function() {
 	this.checkExtensionUpdate = function() {
 		that.sendMessage({
 			extensionUpdated: that.extensionUpdated
-		})
-	}
+		});
+	},
+
+	this.checkTimerLimitReached = function() {
+		chrome.storage.sync.get('time_limit_option', function(obj) {
+			if (obj.time_limit_option && (obj.time_limit_option * 60) <= that.time) {
+				that.limitReached = true;
+				if (that.isRunning()) {
+					that.playReminderSound();
+					that.pause();
+				}
+			} else if (that.time === 1800 || (that.time % 3600 === 0 && that.time !== 0)) {
+				that.playReminderSound();
+			}
+			that.sendMessage({ timerLimitReached: that.limitReached });
+		});
+	},
 
 	// init channel connection with popup
     chrome.runtime.onConnect.addListener(function(port) {
         that.port = port;
         port.onMessage.addListener(function(msg) {
 
-			var callable_actions = ['play', 'pause', 'stop', 'update', 'checkExtensionUpdate'];
+			var callable_actions = ['play', 'pause', 'stop', 'update', 'checkExtensionUpdate', 'checkTimerLimitReached'];
 			if (msg.action && callable_actions.includes(msg.action)) {
 				that[msg.action]();
 			}

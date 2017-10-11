@@ -9,7 +9,7 @@
         <hr>
         <div class="pl15">
             <h2>Sound</h2>
-            <label for="sound">Select sound notification</label>
+            <label for="sound">Select sound notification: </label>
             <select name="sound_option" id="sound" class="option">
                 <option value="beep">Beep</option>
                 <option value="pop">Pop</option>
@@ -24,6 +24,13 @@
             <button id="add_label">Add new</button>
             <small>Max. 5</small>
             <div id="labels"></div>
+        </div>
+        <br><hr>
+        <div class="pl15">
+            <h2>Time limit</h2>
+            <label for="time_limit">Set the max time that timer is allowed to run to: </label>
+            <input type="number" name="time_limit_option" id="time_limit" class="option" value="0"> minutes.
+            <p>Set to 0 to turn it off.</p>
         </div>
         <br><hr>
         <div class="pl15">
