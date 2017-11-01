@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         action: 'checkTimerLimitReached'
     });
 
-    chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
     var manifest = chrome.runtime.getManifest();
     var $stopBtn = document.querySelector('#stop');
     var $playPauseBtn = document.querySelector('#play_pause');

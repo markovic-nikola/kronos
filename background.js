@@ -26,6 +26,7 @@ var Timer = function() {
 			that.setTime(that.time);
 		}, 1000);
         that.setRunning(true);
+		chrome.browserAction.setBadgeBackgroundColor({color: '#2980b9'});
 	},
 
     this.update = function() {
@@ -84,6 +85,7 @@ var Timer = function() {
 		clearInterval(that.interval);
         that.setRunning(false);
         that.update();
+		chrome.browserAction.setBadgeBackgroundColor({color: '#d35400'});
 	},
 
 	this.stop = function() {
@@ -91,6 +93,7 @@ var Timer = function() {
 		that.setTime(0);
 		that.limitReached = false;
 		that.checkTimerLimitReached();
+		chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
 		chrome.browserAction.setBadgeText({text: ''});
 		chrome.storage.sync.remove('time');
 	},
@@ -183,7 +186,7 @@ var Timer = function() {
 	chrome.runtime.onInstalled.addListener(function(details) {
 	    if (details.reason == "install") {} else if (details.reason == "update") {
 			that.extensionUpdated = chrome.runtime.getManifest().version;
-			chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
+			chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
 			chrome.browserAction.setBadgeText({text: 'New'});
 	    } else {
 			that.update();
@@ -199,7 +202,7 @@ var Timer = function() {
 		}
 	});
 
-	chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
+	chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
 	this.syncInitialTime();
 
 }
