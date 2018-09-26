@@ -164,7 +164,10 @@ var Timer = function() {
 				}
 			} else if (that.time === 1800 || (that.time % 3600 === 0 && that.time !== 0)) {
 				that.playReminderSound();
+			} else {
+				that.limitReached = false;
 			}
+
 			that.sendMessage({ timerLimitReached: that.limitReached });
 		});
 	},
