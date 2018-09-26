@@ -56,7 +56,11 @@ var Timer = function() {
 			return ('0' + value).slice(-2);
 		}
 
-		return twoDigitFormat(times.hours) + ':' + twoDigitFormat(times.minutes) + ':' + twoDigitFormat(times.seconds);
+		if (times.hours < 10) {
+			times.hours = '0' + times.hours;
+		}
+
+		return times.hours + ':' + twoDigitFormat(times.minutes) + ':' + twoDigitFormat(times.seconds);
 	},
 
     this.getCurrentFormattedTime = function(time) {
