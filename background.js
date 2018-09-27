@@ -25,7 +25,7 @@ var Timer = function() {
 			that.time++;
 			that.setTime(that.time);
 		}, 1000);
-        that.setRunning(true);
+		that.setRunning(true);
 		chrome.browserAction.setBadgeBackgroundColor({color: '#2980b9'});
 	},
 
@@ -210,8 +210,10 @@ var Timer = function() {
 	});
 
 	chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
-	this.syncInitialTime();
 
 }
 
-var timer = new Timer();
+chrome.runtime.onStartup.addListener(function() {
+	var timer = new Timer();
+	timer.syncInitialTime();
+});
