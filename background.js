@@ -77,8 +77,6 @@ var Timer = function() {
 		} else {
 			return time + ' s';
 		}
-
-		return time;
 	},
 
 	this.formatCurrentHumanTime = function() {
@@ -210,7 +208,7 @@ var Timer = function() {
 	});
 
 	chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
-
+	this.syncInitialTime();
 }
 
 var timer = new Timer();
