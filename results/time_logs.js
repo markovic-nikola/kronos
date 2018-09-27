@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         td_date.appendChild(document.createTextNode(new Date(row.id).toLocaleString()));
         tr.appendChild(td_date);
         var td_time = document.createElement('TD');
-        td_time.appendChild(document.createTextNode(timer.formatTime(row.time)));
+        td_time.appendChild(document.createTextNode(timer.formatTime(row.time) + ' (' + timer.formatHumanTime(row.time) + ')'));
         var delete_link = create_delete_link(label_id, row);
         td_time.appendChild(delete_link);
         tr.appendChild(td_time);

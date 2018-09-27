@@ -191,11 +191,13 @@ var Timer = function() {
 	chrome.runtime.onInstalled.addListener(function(details) {
 	    if (details.reason == "install") {} else if (details.reason == "update") {
 			that.extensionUpdated = chrome.runtime.getManifest().version;
-			chrome.browserAction.setBadgeBackgroundColor({color: '#9719f0'});
-			chrome.browserAction.setBadgeText({text: 'New'});
 	    } else {
 			that.update();
 		}
+	});
+
+	chrome.runtime.onStartup.addListener(function() {
+		timer.syncInitialTime();
 	});
 
 	// keyboard shortcuts
@@ -212,6 +214,3 @@ var Timer = function() {
 }
 
 var timer = new Timer();
-chrome.runtime.onStartup.addListener(function() {
-	timer.syncInitialTime();
-});
