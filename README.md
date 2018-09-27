@@ -12,6 +12,9 @@ Simple tool for tracking your working time.
     - Mac: `Command + Shift + X`
 
 ## Relese notes
+#### v0.9
+- [x] Save time log popup UI improvement
+
 #### v0.8
 - [x] Badge colors as a timer status
 

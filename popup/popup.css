@@ -146,7 +146,7 @@ input:focus {
 }
 
 input[name='save_time_input'], .dropdown > label {
-    border-radius: 20px;
+    border-radius: 5px;
     border: 1px solid #ddd;
     padding: 2px;
     outline: none;
@@ -171,9 +171,9 @@ input[name='save_time_input'], .dropdown > label {
     max-width: 100%;
     display: block;
     user-select: none;
-    color: #81868a;
+    color: #666;
     text-align: left;
-    padding: 2px 0;
+    padding: 2px 0 2px 5px;
 }
 
 .dropdown ul.sublist {
@@ -187,7 +187,7 @@ input[name='save_time_input'], .dropdown > label {
     border-left: 1px solid #3498db;
     border-right: 1px solid #3498db;
     border-bottom: 1px solid #3498db;
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 5px 5px;
 }
 
 .dropdown ul.sublist li {
@@ -203,16 +203,14 @@ input[name='save_time_input'], .dropdown > label {
 }
 
 .dropdown input:checked ~ label {
-    border-radius: 10px 10px 0 0;
+    border-radius: 5px 5px 0 0;
     padding-bottom: 1px;
     border-color: #3498db;
 }
 
 .dropdown .sublist li label {
-    position: relative;
-    right: 6px;
     border-bottom: 1px solid #e6e6e6;
-    padding: 2px 0;
+    padding: 4px 0;
 }
 
 .dropdown .sublist li:last-child label {
@@ -220,7 +218,7 @@ input[name='save_time_input'], .dropdown > label {
 }
 
 .dropdown .sublist li label:hover, .dropdown .sublist li input:checked ~ label {
-    background: #ffffd4;
+    background: #d1ecff;
 }
 
 .label_color {
