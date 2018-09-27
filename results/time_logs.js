@@ -1,3 +1,4 @@
+document.querySelector('title').appendChild(document.createTextNode(chrome.runtime.getManifest().name + ' - Time logs'))
 document.addEventListener('DOMContentLoaded', function() {
 
     var time_logs;
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     var tbody = table.querySelector('tbody');
                     container.appendChild(table);
                     var total = 0;
-                    if (time_logs[key]) {
+                    if (time_logs && time_logs[key]) {
                         time_logs[key].forEach(function(item) {
                             create_tbody(item, tbody, key);
                             total += item.time;
@@ -34,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     total_tr.appendChild(total_text_td);
                     var total_val_td = document.createElement('TD');
                     total_val_td.appendChild(document.createTextNode(timer.formatTime(total) + ' (' + timer.formatHumanTime(total) + ')'));
-                    if (time_logs[key] && time_logs[key].length) {
+                    if (time_logs && time_logs[key] && time_logs[key].length) {
                         var delete_link = create_delete_link(key);
                         total_val_td.appendChild(delete_link);
                     }

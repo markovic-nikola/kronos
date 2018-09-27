@@ -213,7 +213,7 @@ var Timer = function() {
 
 }
 
+var timer = new Timer();
 chrome.runtime.onStartup.addListener(function() {
-	var timer = new Timer();
 	timer.syncInitialTime();
 });
