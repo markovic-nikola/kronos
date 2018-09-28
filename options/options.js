@@ -1,3 +1,4 @@
+document.querySelector('title').appendChild(document.createTextNode(chrome.runtime.getManifest().name + ' - Options'));
 document.addEventListener('DOMContentLoaded', function() {
 
     // on load populate options from storage
@@ -174,6 +175,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('time_limit').addEventListener('change', function(event) {
         chrome.storage.sync.set({'time_limit_option': parseFloat(this.value)});
+    });
+
+    document.getElementById('idle').addEventListener('change', function(event) {
+        chrome.storage.sync.set({'idle': parseFloat(this.value)});
     });
 
 });

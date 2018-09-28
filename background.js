@@ -8,6 +8,7 @@ var Timer = function() {
 	this.audio = null,
 	this.extensionUpdated = null,
 	this.limitReached = false,
+	this.idle = 0,
 
 	this.setTime = function(time) {
 		that.time = time;
@@ -20,13 +21,14 @@ var Timer = function() {
             return;
         }
 
-        that.setTime(that.time);
+		that.setTime(that.time);
 		that.interval = setInterval(function() {
 			that.time++;
 			that.setTime(that.time);
 		}, 1000);
 		that.setRunning(true);
 		chrome.browserAction.setBadgeBackgroundColor({color: '#2980b9'});
+		that.updateIdle();
 	},
 
     this.update = function() {
@@ -167,6 +169,21 @@ var Timer = function() {
 			}
 
 			that.sendMessage({ timerLimitReached: that.limitReached });
+		});
+	},
+
+	this.updateIdle = function() {
+		chrome.storage.sync.get('idle', function(obj) {
+			if (obj.idle > 0) {
+				chrome.idle.setDetectionInterval(obj.idle * 60);
+				chrome.idle.onStateChanged.addListener(function(state) {
+					if (that.isRunning()) {
+						if (state == 'idle') {
+							that.pause();
+						}
+					}
+				});
+			}
 		});
 	},
 

@@ -1,4 +1,4 @@
-document.querySelector('title').appendChild(document.createTextNode(chrome.runtime.getManifest().name + ' - Time logs'))
+document.querySelector('title').appendChild(document.createTextNode(chrome.runtime.getManifest().name + ' - Time logs'));
 document.addEventListener('DOMContentLoaded', function() {
 
     var time_logs;

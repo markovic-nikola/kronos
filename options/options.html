@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title></title>
         <link rel="stylesheet" href="options.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     </head>
@@ -30,6 +31,13 @@
             <h2>Time limit</h2>
             <label for="time_limit">Set the max time that timer is allowed to run to: </label>
             <input type="number" name="time_limit_option" id="time_limit" class="option" value="0"> minutes.
+            <p>Set to 0 to turn it off.</p>
+        </div>
+        <br><hr>
+        <div class="pl15">
+            <h2>Pause if idle</h2>
+            <label for="idle">Pause timer automatically if you are inactive for more than: </label>
+            <input type="number" name="idle" id="idle" class="option" value="0"> minutes.
             <p>Set to 0 to turn it off.</p>
         </div>
         <br><hr>

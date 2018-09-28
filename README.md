@@ -12,6 +12,9 @@ Simple tool for tracking your working time.
     - Mac: `Command + Shift + X`
 
 ## Relese notes
+#### v1.0
+- [x] Option to pause the timer automatically if idle for x amount of minutes
+
 #### v0.9
 - [x] Save time log popup UI improvement
 
