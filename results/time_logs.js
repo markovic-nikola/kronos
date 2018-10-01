@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     total_text_td.appendChild(document.createTextNode('Total'));
                     total_tr.appendChild(total_text_td);
                     var total_val_td = document.createElement('TD');
-                    total_val_td.appendChild(document.createTextNode(timer.formatTime(total) + ' (' + timer.formatHumanTime(total) + ')'));
+                    total_val_td.appendChild(document.createTextNode(timer.formatTime(total) + ' (' + timer.formatToHours(total) + 'h)'));
                     if (time_logs && time_logs[key] && time_logs[key].length) {
                         var delete_link = create_delete_link(key);
                         total_val_td.appendChild(delete_link);
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         td_date.appendChild(document.createTextNode(new Date(row.id).toLocaleString()));
         tr.appendChild(td_date);
         var td_time = document.createElement('TD');
-        td_time.appendChild(document.createTextNode(timer.formatTime(row.time) + ' (' + timer.formatHumanTime(row.time) + ')'));
+        td_time.appendChild(document.createTextNode(timer.formatTime(row.time) + ' (' + timer.formatToHours(row.time) + 'h)'));
         var delete_link = create_delete_link(label_id, row);
         td_time.appendChild(delete_link);
         tr.appendChild(td_time);

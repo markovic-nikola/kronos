@@ -71,7 +71,7 @@ var Timer = function() {
 
 	this.formatHumanTime = function(time) {
 		if (time >= 3600) {
-			var hours = that.round(time / 3600);
+			var hours = this.formatToHours(time);
 			return hours + ' h';
 		} else if (time >= 60) {
 			var minutes = that.round(time / 60);
@@ -79,6 +79,10 @@ var Timer = function() {
 		} else {
 			return time + ' s';
 		}
+	},
+
+	this.formatToHours = function(time) {
+		return that.round(time / 3600);
 	},
 
 	this.formatCurrentHumanTime = function() {
