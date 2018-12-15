@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     container.appendChild(h2);
 
                     var table = init_table(obj.labels[key].color);
+                    table.id = key;
+                    table.setAttribute('data-value', obj.labels[key].name);
                     var tbody = table.querySelector('tbody');
                     container.appendChild(table);
                     var total = 0;
@@ -37,7 +39,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     total_val_td.appendChild(document.createTextNode(timer.formatTime(total) + ' (' + timer.formatToHours(total) + 'h)'));
                     if (time_logs && time_logs[key] && time_logs[key].length) {
                         var delete_link = create_delete_link(key);
+                        var download_csv_link = create_download_csv_link(key);
                         total_val_td.appendChild(delete_link);
+                        total_val_td.appendChild(download_csv_link);
                     }
                     total_tr.appendChild(total_val_td);
                     tbody.appendChild(total_tr);
@@ -80,11 +84,15 @@ document.addEventListener('DOMContentLoaded', function() {
         td_date.appendChild(document.createTextNode(new Date(row.id).toLocaleString()));
         tr.appendChild(td_date);
         var td_time = document.createElement('TD');
-        td_time.appendChild(document.createTextNode(timer.formatTime(row.time) + ' (' + timer.formatToHours(row.time) + 'h)'));
+        td_time.appendChild(document.createTextNode(fullTimeFormat(row.time)));
         var delete_link = create_delete_link(label_id, row);
         td_time.appendChild(delete_link);
         tr.appendChild(td_time);
         tbody.appendChild(tr);
+    }
+
+    function fullTimeFormat(time) {
+        return timer.formatTime(time) + ' (' + timer.formatToHours(time) + 'h)';
     }
 
     function create_delete_link(label_id, row) {
@@ -92,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
         delete_link.setAttribute('href', '#' + label_id);
         delete_link.appendChild(document.createTextNode('x'));
         delete_link.setAttribute('class', 'delete_icon');
+        delete_link.setAttribute('title', 'Delete');
         if (row) {
             delete_link.setAttribute('data-value', row.id);
         }
@@ -119,6 +128,89 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         return delete_link;
+    }
+
+    function create_download_csv_link(label_id) {
+        var link = document.createElement('a');
+        link.text = 'CSV';
+        link.className = 'download_btn';
+        link.setAttribute('title', 'Download as CSV');
+        link.setAttribute('href', '#');
+
+        chrome.storage.sync.get('time_logs', function(obj) {
+            if (obj.time_logs) {
+                if (obj.time_logs[label_id] && obj.time_logs[label_id].length) {
+                    var csv_data = [];
+                    var total = 0;
+
+                    obj.time_logs[label_id].forEach(function(item) {
+                        csv_data.push({
+                            'Name': item.name,
+                            'Saved at': new Date(item.id).toLocaleString(),
+                            'Time': timer.formatTime(item.time),
+                            'Hours': timer.formatToHours(item.time)
+                        });
+                        total += item.time;
+                    });
+
+                    csv_data.push({
+                        'Name': 'Total',
+                        'Saved at': '',
+                        'Time': timer.formatTime(total),
+                        'Hours': timer.formatToHours(total)
+                    });
+
+                    var csv = convertArrayOfObjectsToCSV({
+                        data: csv_data,
+                        columnDelimiter: ';'
+                    });
+
+                    if (csv == null) return;
+
+                    if (!csv.match(/^data:text\/csv/i)) {
+                        csv = 'data:text/csv;charset=utf-8,' + csv;
+                    }
+
+                    data = encodeURI(csv);
+                    link.setAttribute('href', data);
+                    link.setAttribute('id', label_id);
+                    var filename = (document.getElementById(label_id).getAttribute('data-value')) + '.csv';
+                    link.setAttribute('download', filename);
+                }
+            }
+        });
+
+        return link;
+    }
+
+    function convertArrayOfObjectsToCSV(args) {
+        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+        data = args.data || null;
+
+        if (data == null || !data.length) {
+            return null;
+        }
+
+        columnDelimiter = args.columnDelimiter || ',';
+        lineDelimiter = args.lineDelimiter || '\n';
+        keys = Object.keys(data[0]);
+
+        result = '';
+        result += keys.join(columnDelimiter);
+        result += lineDelimiter;
+
+        data.forEach(function(item) {
+            ctr = 0;
+            keys.forEach(function(key) {
+                if (ctr > 0) result += columnDelimiter;
+                result += item[key];
+                ctr++;
+            });
+
+            result += lineDelimiter;
+
+        });
+        return result;
     }
 
 });

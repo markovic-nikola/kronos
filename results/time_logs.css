@@ -1,13 +1,13 @@
 body {
-    min-height: 100vh;
-    background: #34495e;
-    color: #fff;
-    font-family: 'Roboto', sans-serif;
+  min-height: 100vh;
+  background: #34495e;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
 }
 
 hr {
-    border-color: #fff;
-    border-style: solid;
+  border-color: #fff;
+  border-style: solid;
 }
 
 table {
@@ -124,27 +124,40 @@ td.text-right {
 }
 
 tr.total td {
-    font-weight: 700;
+  font-weight: 700;
 }
 
 .delete_icon {
-    color: #fff;
-    text-decoration: none;
-    display: inline-block;
-    background: #e74c3c;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    line-height: 20px;
-    border-radius: 20px;
-    margin-left: 15px;
-    text-transform: uppercase;
-    opacity: 0.8;
-    -webkit-transition: opacity 0.2 ease;
-    -o-transition: opacity 0.2 ease;
-    transition: opacity 0.2 ease;
+  color: #fff;
+  text-decoration: none;
+  display: inline-block;
+  background: #e74c3c;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 21px;
+  border-radius: 20px;
+  margin-left: 15px;
+  text-transform: uppercase;
+  opacity: 0.8;
+  -webkit-transition: opacity 0.2 ease;
+  -o-transition: opacity 0.2 ease;
+  transition: opacity 0.2 ease;
 }
 
 .delete_icon:hover, .delete_icon:focus {
-    opacity: 1;
+  opacity: 1;
+}
+
+.download_btn {
+  color: #fff;
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 15px;
+  background: #778beb;
+  height: 20px;
+  text-align: center;
+  line-height: 21px;
+  border-radius: 10px;
+  padding: 0 10px;
 }
