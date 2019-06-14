@@ -138,11 +138,24 @@ var Timer = function() {
 		});
 	},
 
-	this.playReminderSound = function() {
+	this.playReminderSound = function(isReminder) {
 		chrome.storage.sync.get('sound_option', function(obj) {
+
+			var fileName;
+			if (obj.sound_option && obj.sound_option == 'no_sound') {
+				return false;
+			}
+
+			if (isReminder) {
+				fileName = obj.sound_option ? obj.sound_option : "beep"
+			} else {
+				fileName = 'pause';
+			}
+
 			that.audio = new Audio();
-			that.audio.src = "/assets/" + (obj.sound_option ? obj.sound_option : "beep") + ".mp3";
+			that.audio.src = "/assets/" + fileName + ".mp3";
 			that.audio.play();
+
 		});
 	},
 
@@ -163,11 +176,11 @@ var Timer = function() {
 			if (obj.time_limit_option && (obj.time_limit_option * 60) <= that.time) {
 				that.limitReached = true;
 				if (that.isRunning()) {
-					that.playReminderSound();
+					that.playReminderSound(true);
 					that.pause();
 				}
 			} else if (that.time === 1800 || (that.time % 3600 === 0 && that.time !== 0)) {
-				that.playReminderSound();
+				that.playReminderSound(true);
 			} else {
 				that.limitReached = false;
 			}
@@ -184,6 +197,7 @@ var Timer = function() {
 					if (that.isRunning()) {
 						if (state == 'idle') {
 							that.pause();
+							that.playReminderSound();
 						}
 					}
 				});

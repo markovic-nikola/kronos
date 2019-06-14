@@ -8,11 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (obj[name]) {
                 element.value = obj[name];
             }
+
+            disableSoundBtn(document.getElementById('sound').value);
         });
     });
 
     document.getElementById('sound').addEventListener('change', function(event) {
         chrome.storage.sync.set({'sound_option': this.value});
+        disableSoundBtn(this.value);
     });
 
     document.getElementById('sound_btn').addEventListener('click', function(event) {
@@ -171,6 +174,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function is_label_rows_max() {
         const max_labels = 5;
         return document.querySelectorAll('.label_row').length >= max_labels;
+    }
+
+    function disableSoundBtn(value) {
+        document.getElementById('sound_btn').disabled = value == 'no_sound';
     }
 
     document.getElementById('time_limit').addEventListener('change', function(event) {
