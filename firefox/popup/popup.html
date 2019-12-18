@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="popup.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    </head>
+    <body>
+        <div id="timer"></div>
+        <div id="actions">
+            <button type="button" id="stop" name="stop"></button>
+            <button type="button" id="play_pause" name="play"></button>
+            <button type="button" id="save_time" name="saveTime" disabled></button>
+        </div>
+        <div id="save_time_input">
+            <div class='dropdown'>
+                <input id="dropdown_labels" type="checkbox" name="menu"/>
+                <label for="dropdown_labels">Labels</label>
+                <ul class='sublist'></ul>
+            </div>
+            <input type="text" name="save_time_input" placeholder="Name">
+            <p class="text-danger" id="save_time_error"></p>
+            <button type="button" id="save_time_btn">Save time</button>
+        </div>
+        <a href="#" id="results">&gt; See your time logs &lt;</a>
+        <div id="news"></div>
+    </body>
+    <script src='popup.js'></script>
+</html>

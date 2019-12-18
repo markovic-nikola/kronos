@@ -1,0 +1,234 @@
+body {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+}
+
+a {
+    color: #e74c3c;
+}
+
+a:hover, a:active, a:focus, a {
+    outline: none;
+}
+
+#news a {
+    color: #9719f0;
+}
+
+input {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus {
+    border-color: #3498db !important;
+}
+
+#timer {
+    font-size: 24px;
+    text-align: center;
+    border-bottom: 2px solid #e4e4e4;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    z-index: 3;
+    background: #fff;
+    position: relative;
+}
+
+button::-moz-focus-inner {
+    border: 0;
+}
+
+#actions {
+    min-width: 175px;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #e4e4e4;
+    padding-bottom: 10px;
+}
+
+#actions button {
+    border: none;
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 16px;
+    cursor: pointer;
+    outline: none;
+    -webkit-transition: border 0.2s ease;
+    -o-transition: border 0.2s ease;
+    transition: border 0.2s ease;
+    background-color: #fff;
+    border: 2px solid #e2e2e2;
+    opacity: 1;
+    outline: none;
+}
+
+#actions button[name="stop"]:hover, #actions button[name="stop"]:focus {
+    border-color: #e74c3c;
+}
+
+#actions button[name="play"]:hover, #actions button[name="play"]:focus {
+    border-color: #3498db;
+}
+
+#actions button[name="pause"]:hover, #actions button[name="pause"]:focus {
+    border-color: #f39c12;
+}
+
+#actions button[name="saveTime"]:hover, #actions button[name="saveTime"]:focus {
+    border-color: #2ecc71;
+}
+
+#actions button[name="stop"] {
+    background-image: url(../assets/stop.png);
+    margin-right: 5px;
+}
+
+#actions button[name="play"] {
+    background-image: url(../assets/play.png);
+    background-position-x: 60%;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#actions button[name="pause"] {
+    background-image: url(../assets/pause.png);
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#actions button[name="saveTime"] {
+    background-image: url(../assets/save.png);
+    margin-left: 5px;
+}
+
+#actions button[disabled] {
+    opacity: 0.4;
+}
+
+#news {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 10px;
+}
+
+#save_time_input {
+    display: none;
+    margin-top: 10px;
+    width: 175px;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 0 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#save_time_btn {
+    color: #fff;
+    background: #2ecc71;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    -webkit-transition: background 0.2s ease;
+    -o-transition: background 0.2s ease;
+    transition: background 0.2s ease;
+    outline: none;
+}
+
+#save_time_btn:focus, #save_time_btn:hover {
+    background-color: #27ae60;
+}
+
+input[name='save_time_input'], .dropdown > label {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 2px;
+    outline: none;
+    text-indent: 3px;
+    -webkit-transition: border 0.2s ease;
+    -o-transition: border 0.2s ease;
+    transition: border 0.2s ease;
+}
+
+.text-danger {
+    color: #e74c3c;
+}
+
+.dropdown {
+    max-width: 100%;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.dropdown label {
+    cursor: pointer;
+    max-width: 100%;
+    display: block;
+    user-select: none;
+    color: #666;
+    text-align: left;
+    padding: 2px 0 2px 5px;
+}
+
+.dropdown ul.sublist {
+    padding: 0;
+    display: none;
+    margin: 0;
+    text-align: left;
+    text-indent: 7px;
+    color: #444;
+    overflow: hidden;
+    border-left: 1px solid #3498db;
+    border-right: 1px solid #3498db;
+    border-bottom: 1px solid #3498db;
+    border-radius: 0 0 5px 5px;
+}
+
+.dropdown ul.sublist li {
+    list-style: none;
+}
+
+.dropdown input {
+    display: none;
+}
+
+.dropdown input:checked ~ ul.sublist{
+    display: block;
+}
+
+.dropdown input:checked ~ label {
+    border-radius: 5px 5px 0 0;
+    padding-bottom: 1px;
+    border-color: #3498db;
+}
+
+.dropdown .sublist li label {
+    border-bottom: 1px solid #e6e6e6;
+    padding: 4px 0;
+}
+
+.dropdown .sublist li:last-child label {
+    border: none;
+}
+
+.dropdown .sublist li label:hover, .dropdown .sublist li input:checked ~ label {
+    background: #d1ecff;
+}
+
+.label_color {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+}
+
+#results {
+    text-align: center;
+}

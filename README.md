@@ -10,8 +10,12 @@ Simple tool for tracking your working time.
     - Default: `Ctrl + Shift + Space`
     - Mac: `Command + Shift + Space`
 - **Stop**
-    - Default: `Ctrl + Shift + X`
-    - Mac: `Command + Shift + X`
+    - Chrome
+        - Default: `Ctrl + Shift + X`
+        - Mac: `Command + Shift + X`
+    - Firefox
+        - Default: `Ctrl + Shift + Q`
+        - Mac: `Command + Shift + Q`
 
 ## Relese notes
 
