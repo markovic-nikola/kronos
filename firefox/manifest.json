@@ -34,11 +34,6 @@
         "storage",
         "idle"
     ],
-    "applications": {
-        "gecko": {
-            "id": "addon@example.com"
-        }
-    },
     "commands": {
         "play_pause": {
             "suggested_key": {
