@@ -126,7 +126,7 @@ var Timer = function() {
 		if (value >= 10) {
 			return Math.round(value);
 		} else {
-		return value.toFixed(1);
+			return value.toFixed(0);
 		}
 	},
 
@@ -246,6 +246,7 @@ var Timer = function() {
 	});
 
 	browser.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
+	browser.browserAction.setBadgeTextColor({color: '#fff'});
 	this.syncInitialTime();
 }
 

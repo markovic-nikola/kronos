@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Kronos Timer",
-    "version": "1.3",
+    "version": "1.3.1",
     "description": "Simple tool for tracking your working time.",
     "author": "Nikola Markovic",
     "homepage_url": "https://markovic-nikola.github.io/kronos/",
@@ -34,6 +34,12 @@
         "storage",
         "idle"
     ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "kronos@markovicnikola.com",
+            "strict_min_version": "42.0"
+        }
+    },
     "commands": {
         "play_pause": {
             "suggested_key": {
