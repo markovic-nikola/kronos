@@ -27,7 +27,7 @@ var Timer = function() {
 			that.setTime(that.time);
 		}, 1000);
 		that.setRunning(true);
-		chrome.browserAction.setBadgeBackgroundColor({color: '#2980b9'});
+		chrome.action.setBadgeBackgroundColor({color: '#2980b9'});
 		that.updateIdle();
 	},
 
@@ -40,7 +40,7 @@ var Timer = function() {
 		});
 
 		that.saveTime(that.time);
-		chrome.browserAction.setBadgeText({text: (that.time > 0 ? that.formatCurrentHumanTime() : '')});
+		chrome.action.setBadgeText({text: (that.time > 0 ? that.formatCurrentHumanTime() : '')});
 		that.checkTimerLimitReached();
 
     },
@@ -93,7 +93,7 @@ var Timer = function() {
 		clearInterval(that.interval);
         that.setRunning(false);
         that.update();
-		chrome.browserAction.setBadgeBackgroundColor({color: '#d35400'});
+		chrome.action.setBadgeBackgroundColor({color: '#d35400'});
 	},
 
 	this.stop = function() {
@@ -101,8 +101,8 @@ var Timer = function() {
 		that.setTime(0);
 		that.limitReached = false;
 		that.checkTimerLimitReached();
-		chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
-		chrome.browserAction.setBadgeText({text: ''});
+		chrome.action.setBadgeBackgroundColor({color: '#e74c3c'});
+		chrome.action.setBadgeText({text: ''});
 		chrome.storage.sync.remove('time');
 	},
 
@@ -244,7 +244,7 @@ var Timer = function() {
 		}
 	});
 
-	chrome.browserAction.setBadgeBackgroundColor({color: '#e74c3c'});
+	chrome.action.setBadgeBackgroundColor({color: '#e74c3c'});
 	this.syncInitialTime();
 }
 

@@ -14,7 +14,7 @@
         "storage",
         "idle"
     ],
-    "browser_action": {
+    "action": {
         "default_icon": {
                 "16": "assets/icon_16.png",
                 "32": "assets/icon_32.png",
@@ -25,10 +25,7 @@
         "default_popup": "popup/popup.html"
     },
     "background": {
-        "scripts": [
-            "background.js"
-        ],
-        "persistent": false
+		"service_worker": "background.js"
     },
     "offline_enabled": true,
     "options_page": "options/options.html",
