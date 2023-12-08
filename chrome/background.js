@@ -1,3 +1,5 @@
+import {getCurrentFormattedTime, formatCurrentHumanTime} from "./helpers.js";
+
 var Timer = function() {
 
 	var that = this;
@@ -32,62 +34,17 @@ var Timer = function() {
 	},
 
     this.update = function() {
-
 		that.sendMessage({
-			time: that.getCurrentFormattedTime(),
+			time: getCurrentFormattedTime(that.time),
 			isRunning: that.isRunning(),
 			timeRaw: that.time
 		});
 
 		that.saveTime(that.time);
-		chrome.action.setBadgeText({text: (that.time > 0 ? that.formatCurrentHumanTime() : '')});
+		chrome.action.setBadgeText({text: (that.time > 0 ? formatCurrentHumanTime(that.time) : '')});
 		that.checkTimerLimitReached();
 
     },
-
-	this.formatTime = function(time) {
-		var times = {
-			hours: Math.floor(time / 60 / 60)
-		};
-		times.hoursInSeconds = times.hours * 60 * 60;
-		times.minutes = Math.floor((time - times.hoursInSeconds) / 60);
-		times.minutesInSeconds = times.minutes * 60;
-		times.seconds = Math.floor(time - (times.hoursInSeconds + times.minutesInSeconds));
-
-		function twoDigitFormat(value) {
-			return ('0' + value).slice(-2);
-		}
-
-		if (times.hours < 10) {
-			times.hours = '0' + times.hours;
-		}
-
-		return times.hours + ':' + twoDigitFormat(times.minutes) + ':' + twoDigitFormat(times.seconds);
-	},
-
-    this.getCurrentFormattedTime = function(time) {
-        return that.formatTime(that.time);
-    },
-
-	this.formatHumanTime = function(time) {
-		if (time >= 3600) {
-			var hours = this.formatToHours(time);
-			return hours + ' h';
-		} else if (time >= 60) {
-			var minutes = that.round(time / 60);
-			return minutes + ' m';
-		} else {
-			return time + ' s';
-		}
-	},
-
-	this.formatToHours = function(time) {
-		return that.round(time / 3600);
-	},
-
-	this.formatCurrentHumanTime = function() {
-		return that.formatHumanTime(that.time);
-	},
 
 	this.pause = function() {
 		clearInterval(that.interval);
@@ -120,14 +77,6 @@ var Timer = function() {
 			chrome.storage.sync.set({'time': time});
 		}
     },
-
-	this.round = function(value) {
-		if (value >= 10) {
-			return Math.round(value);
-		} else {
-		return value.toFixed(1);
-		}
-	},
 
 	this.syncInitialTime = function() {
 		chrome.storage.sync.get('time', function(obj) {
@@ -249,3 +198,4 @@ var Timer = function() {
 }
 
 var timer = new Timer();
+chrome.timer = timer;

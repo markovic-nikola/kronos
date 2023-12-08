@@ -1,8 +1,9 @@
+import {formatTime, formatToHours} from '../helpers.js';
+
 document.querySelector('title').appendChild(document.createTextNode(chrome.runtime.getManifest().name + ' - Time logs'));
 document.addEventListener('DOMContentLoaded', function() {
 
     var time_logs;
-    var timer = chrome.extension.getBackgroundPage().timer; // shortcut for formatting time
     chrome.storage.sync.get('time_logs', function(obj) {
         if (obj.time_logs) {
             time_logs = obj.time_logs;
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         chrome.storage.sync.get('labels', function(obj) {
             if (obj.labels) {
                 var container = document.getElementById('container');
-                for (key in obj.labels) {
+                for (const key in obj.labels) {
                     var h2 = document.createElement('H2');
                     h2.appendChild(document.createTextNode('Label: ' + obj.labels[key].name));
                     h2.style.color = obj.labels[key].color;
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     total_text_td.appendChild(document.createTextNode('Total'));
                     total_tr.appendChild(total_text_td);
                     var total_val_td = document.createElement('TD');
-                    total_val_td.appendChild(document.createTextNode(timer.formatTime(total) + ' (' + timer.formatToHours(total) + 'h)'));
+                    total_val_td.appendChild(document.createTextNode(formatTime(total) + ' (' + formatToHours(total) + 'h)'));
                     if (time_logs && time_logs[key] && time_logs[key].length) {
                         var delete_link = create_delete_link(key);
                         var download_csv_link = create_download_csv_link(key);
@@ -92,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fullTimeFormat(time) {
-        return timer.formatTime(time) + ' (' + timer.formatToHours(time) + 'h)';
+        return formatTime(time) + ' (' + formatToHours(time) + 'h)';
     }
 
     function create_delete_link(label_id, row) {
@@ -147,8 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         csv_data.push({
                             'Name': item.name,
                             'Saved at': new Date(item.id).toLocaleString(),
-                            'Time': timer.formatTime(item.time),
-                            'Hours': timer.formatToHours(item.time)
+                            'Time': formatTime(item.time),
+                            'Hours': formatToHours(item.time)
                         });
                         total += item.time;
                     });
@@ -156,8 +157,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     csv_data.push({
                         'Name': 'Total',
                         'Saved at': '',
-                        'Time': timer.formatTime(total),
-                        'Hours': timer.formatToHours(total)
+                        'Time': formatTime(total),
+                        'Hours': formatToHours(total)
                     });
 
                     var csv = convertArrayOfObjectsToCSV({
@@ -171,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         csv = 'data:text/csv;charset=utf-8,' + csv;
                     }
 
-                    data = encodeURI(csv);
+                    let data = encodeURI(csv);
                     link.setAttribute('href', data);
                     link.setAttribute('id', label_id);
                     var filename = (document.getElementById(label_id).getAttribute('data-value')) + '.csv';
