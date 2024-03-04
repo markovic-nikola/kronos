@@ -18,7 +18,6 @@ var Timer = function() {
 	},
 
 	this.play = function() {
-
         if (that.isRunning() || that.limitReached) {
             return;
         }
@@ -89,7 +88,6 @@ var Timer = function() {
 
 	this.playReminderSound = function(isReminder) {
 		chrome.storage.sync.get('sound_option', function(obj) {
-
 			var fileName;
 			if (obj.sound_option && obj.sound_option == 'no_sound') {
 				return false;
@@ -101,10 +99,7 @@ var Timer = function() {
 				fileName = 'pause';
 			}
 
-			that.audio = new Audio();
-			that.audio.src = "/assets/" + fileName + ".mp3";
-			that.audio.play();
-
+			that.sendMessage({playSound: "/assets/" + fileName + ".mp3"});
 		});
 	},
 
@@ -158,12 +153,10 @@ var Timer = function() {
     chrome.runtime.onConnect.addListener(function(port) {
         that.port = port;
         port.onMessage.addListener(function(msg) {
-
 			var callable_actions = ['play', 'pause', 'stop', 'update', 'checkExtensionUpdate', 'checkTimerLimitReached'];
 			if (msg.action && callable_actions.includes(msg.action)) {
 				that[msg.action]();
 			}
-
 		});
 
         port.onDisconnect.addListener(function() {

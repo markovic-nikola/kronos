@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var $playPauseBtn = document.querySelector('#play_pause');
 
     $stopBtn.addEventListener('click', function(event) {
-        console.log('x');
         port.postMessage({
             action: "stop"
         });

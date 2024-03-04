@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
     $playPauseBtn.setAttribute('title', manifest.commands.play_pause.suggested_key.default);
 
     port.onMessage.addListener(function(msg) {
-
         if (msg.time) {
             document.getElementById('timer').innerHTML = '';
             document.getElementById('timer').appendChild(document.createTextNode(msg.time));
@@ -61,6 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
             current_time = msg.timeRaw;
         }
 
+		if (msg.playSound) {
+			let audio = new Audio();
+			audio.src = msg.playSound;
+			audio.play();
+		}
+
         if (msg.extensionUpdated) {
             showUpdateLink(msg.extensionUpdated);
         }
@@ -68,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (msg.timerLimitReached !== null && typeof msg.timerLimitReached !== 'undefined') {
             $playPauseBtn.disabled = msg.timerLimitReached;
         }
-
     });
 
     function showUpdateLink(version) {
