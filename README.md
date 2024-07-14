@@ -18,6 +18,11 @@ Simple tool for tracking your working time.
         - Mac: `Command + Shift + Q`
 
 ## Relese notes
+#### v1.5
+
+- [x] Time logs can be edited now.
+- [x] Added hourly rate and calculated price unit in the time logs.
+
 #### v1.4
 
 - [x] Upgraded manifest to v3.

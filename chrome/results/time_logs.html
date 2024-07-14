@@ -1,14 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <title></title>
-        <link rel="stylesheet" href="time_logs.css">
-        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    </head>
-    <body>
-        <h1>Time logs</h1>
-        <hr>
-        <div id="container"></div>
-    </body>
-    <script src='time_logs.js' type="module"></script>
+	<head>
+		<title></title>
+		<link rel="stylesheet" href="time_logs.css" />
+		<link
+			href="https://fonts.googleapis.com/css?family=Roboto"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<h1>Time logs</h1>
+		<hr />
+		<div id="container"></div>
+
+		<dialog id="edit_entry_dialog">
+			<h2>Edit log entry</h2>
+			<form>
+				<div>
+					<label>
+						Name:
+						<input type="text" name="name" required />
+					</label>
+				</div>
+				<div class="time_input">
+					<label>
+						Hours:
+						<input
+							type="number"
+							name="hours"
+							required
+							min="0"
+							step="1"
+						/>
+					</label>
+					<label>
+						Minutes:
+						<input
+							type="number"
+							name="minutes"
+							required
+							min="0"
+							max="59"
+							step="1"
+						/>
+					</label>
+					<label>
+						Seconds:
+						<input
+							type="number"
+							name="seconds"
+							required
+							min="0"
+							max="59"
+							step="1"
+						/>
+					</label>
+				</div>
+				<input type="hidden" name="row_id" />
+				<input type="hidden" name="label_id" />
+				<input type="submit" value="Submit" />
+				<button type="button" id="close_entry_dialog">Cancel</button>
+			</form>
+		</dialog>
+	</body>
+	<script src="time_logs.js" type="module"></script>
 </html>
