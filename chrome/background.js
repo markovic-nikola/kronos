@@ -1,194 +1,229 @@
-import {getCurrentFormattedTime, formatCurrentHumanTime} from "./helpers.js";
+// --- START OF FILE background.js ---
 
-var Timer = function() {
+import { getCurrentFormattedTime, formatCurrentHumanTime } from "./helpers.js";
 
-	var that = this;
-    this.time = 0,
-	this.interval = null,
-    this.running = false,
-    this.port = null,
-	this.audio = null,
-	this.extensionUpdated = null,
-	this.limitReached = false,
-	this.idle = 0,
-
-	this.setTime = function(time) {
-		that.time = time;
-		that.update();
-	},
-
-	this.play = function() {
-        if (that.isRunning() || that.limitReached) {
-            return;
-        }
-
-		that.setTime(that.time);
-		that.interval = setInterval(function() {
-			that.time++;
-			that.setTime(that.time);
-		}, 1000);
-		that.setRunning(true);
-		chrome.action.setBadgeBackgroundColor({color: '#2980b9'});
-		that.updateIdle();
-	},
-
-    this.update = function() {
-		that.sendMessage({
-			time: getCurrentFormattedTime(that.time),
-			isRunning: that.isRunning(),
-			timeRaw: that.time
-		});
-
-		that.saveTime(that.time);
-		chrome.action.setBadgeText({text: (that.time > 0 ? formatCurrentHumanTime(that.time) : '')});
-		that.checkTimerLimitReached();
-
-    },
-
-	this.pause = function() {
-		clearInterval(that.interval);
-        that.setRunning(false);
-        that.update();
-		chrome.action.setBadgeBackgroundColor({color: '#d35400'});
-	},
-
-	this.stop = function() {
-		that.pause();
-		that.setTime(0);
-		that.limitReached = false;
-		that.checkTimerLimitReached();
-		chrome.action.setBadgeBackgroundColor({color: '#e74c3c'});
-		chrome.action.setBadgeText({text: ''});
-		chrome.storage.sync.remove('time');
-	},
-
-    this.setRunning = function(value) {
-        that.running = value;
-    },
-
-	this.isRunning = function() {
-		return that.running;
-	},
-
-    this.saveTime = function(time, strict) {
-		// if it's not strict saving then save every 3 seconds -> escape quota limit
-		if (strict || time % 3 == 0) {
-			chrome.storage.sync.set({'time': time});
-		}
-    },
-
-	this.syncInitialTime = function() {
-		chrome.storage.sync.get('time', function(obj) {
-			if (obj.time) {
-				that.setTime(obj.time);
-			}
-			that.update();
-		});
-	},
-
-	this.playReminderSound = function(isReminder) {
-		chrome.storage.sync.get('sound_option', function(obj) {
-			var fileName;
-			if (obj.sound_option && obj.sound_option == 'no_sound') {
-				return false;
-			}
-
-			if (isReminder) {
-				fileName = obj.sound_option ? obj.sound_option : "beep"
-			} else {
-				fileName = 'pause';
-			}
-
-			that.sendMessage({playSound: "/assets/" + fileName + ".mp3"});
-		});
-	},
-
-	this.sendMessage = function(obj) {
-		if (that.port) {
-			that.port.postMessage(obj);
-		}
-	},
-
-	this.checkExtensionUpdate = function() {
-		that.sendMessage({
-			extensionUpdated: that.extensionUpdated
-		});
-	},
-
-	this.checkTimerLimitReached = function() {
-		chrome.storage.sync.get('time_limit_option', function(obj) {
-			if (obj.time_limit_option && (obj.time_limit_option * 60) <= that.time) {
-				that.limitReached = true;
-				if (that.isRunning()) {
-					that.playReminderSound(true);
-					that.pause();
-				}
-			} else if (that.time === 1800 || (that.time % 3600 === 0 && that.time !== 0)) {
-				that.playReminderSound(true);
-			} else {
-				that.limitReached = false;
-			}
-
-			that.sendMessage({ timerLimitReached: that.limitReached });
-		});
-	},
-
-	this.updateIdle = function() {
-		chrome.storage.sync.get('idle', function(obj) {
-			if (obj.idle > 0) {
-				chrome.idle.setDetectionInterval(obj.idle * 60);
-				chrome.idle.onStateChanged.addListener(function(state) {
-					if (that.isRunning()) {
-						if (state == 'idle') {
-							that.pause();
-							that.playReminderSound();
-						}
-					}
-				});
-			}
-		});
-	},
-
-	// init channel connection with popup
-    chrome.runtime.onConnect.addListener(function(port) {
-        that.port = port;
-        port.onMessage.addListener(function(msg) {
-			var callable_actions = ['play', 'pause', 'stop', 'update', 'checkExtensionUpdate', 'checkTimerLimitReached'];
-			if (msg.action && callable_actions.includes(msg.action)) {
-				that[msg.action]();
-			}
-		});
-
-        port.onDisconnect.addListener(function() {
-            that.port = null;
-        });
-    });
-
-	// first run after install/update
-	chrome.runtime.onInstalled.addListener(function(details) {
-	    if (details.reason == "install") {} else if (details.reason == "update") {
-			that.extensionUpdated = chrome.runtime.getManifest().version;
-	    } else {
-			that.update();
-		}
+// --- Offscreen helpers ---
+let creating;
+async function hasOffscreenDocument() {
+	const offscreenUrl = chrome.runtime.getURL("offscreen/offscreen.html");
+	const existingContexts = await chrome.runtime.getContexts({
+		contextTypes: ["OFFSCREEN_DOCUMENT"],
+		documentUrls: [offscreenUrl],
 	});
-
-	chrome.runtime.onStartup.addListener(function() {
-		timer.syncInitialTime();
-	});
-
-	// keyboard shortcuts
-	chrome.commands.onCommand.addListener(function(command) {
-	    if (command == 'play_pause') {
-			that.isRunning() ? that.pause() : that.play();
-		} else if (command == 'stop') {
-			that.stop();
-		}
-	});
-
-	chrome.action.setBadgeBackgroundColor({color: '#e74c3c'});
-	this.syncInitialTime();
+	return existingContexts.length > 0;
 }
 
-var timer = new Timer();
-chrome.timer = timer;
+async function playAudio(path) {
+	if (creating) {
+		await creating;
+	} else if (!(await hasOffscreenDocument())) {
+		creating = chrome.offscreen.createDocument({
+			url: "offscreen/offscreen.html",
+			reasons: ["AUDIO_PLAYBACK"],
+			justification: "Timer notifications require audio playback.",
+		});
+		await creating;
+		creating = null;
+	}
+	await chrome.runtime.sendMessage({
+		type: "play-audio",
+		target: "offscreen",
+		data: { path },
+	});
+}
+
+// --- Main Timer Logic Object ---
+const timer = {
+	time: 0,
+	interval: null,
+	running: false,
+	port: null,
+	extensionUpdated: null,
+	limitReached: false,
+
+	setTime(time) {
+		this.time = time;
+		this.update();
+	},
+
+	play() {
+		if (this.isRunning() || this.limitReached) {
+			return;
+		}
+		this.setTime(this.time);
+		this.interval = setInterval(() => {
+			this.time++;
+			this.setTime(this.time);
+		}, 1000);
+		this.setRunning(true);
+		chrome.action.setBadgeBackgroundColor({ color: "#2980b9" });
+		this.updateIdle();
+	},
+
+	update() {
+		this.sendMessage({
+			time: getCurrentFormattedTime(this.time),
+			isRunning: this.isRunning(),
+			timeRaw: this.time,
+		});
+		this.saveTime(this.time);
+		chrome.action.setBadgeText({
+			text: this.time > 0 ? formatCurrentHumanTime(this.time) : "",
+		});
+		this.checkTimerLimitReached();
+	},
+
+	pause() {
+		clearInterval(this.interval);
+		this.setRunning(false);
+		this.update();
+		chrome.action.setBadgeBackgroundColor({ color: "#d35400" });
+	},
+
+	stop() {
+		this.pause();
+		this.setTime(0);
+		this.limitReached = false;
+		this.checkTimerLimitReached();
+		chrome.action.setBadgeBackgroundColor({ color: "#e74c3c" });
+		chrome.action.setBadgeText({ text: "" });
+		chrome.storage.sync.remove("time");
+	},
+
+	setRunning(value) {
+		this.running = value;
+	},
+
+	isRunning() {
+		return this.running;
+	},
+
+	saveTime(time, strict) {
+		if (strict || time % 3 == 0) {
+			chrome.storage.sync.set({ time: time });
+		}
+	},
+
+	syncInitialTime() {
+		chrome.storage.sync.get("time", (obj) => {
+			if (obj && obj.time) {
+				this.setTime(obj.time);
+			}
+			this.update();
+		});
+	},
+
+	playReminderSound(isReminder) {
+		chrome.storage.sync.get("sound_option", (obj) => {
+			if (obj.sound_option && obj.sound_option == "no_sound") {
+				return false;
+			}
+			const fileName = isReminder ? obj.sound_option || "beep" : "pause";
+			playAudio(`/assets/${fileName}.mp3`);
+		});
+	},
+
+	sendMessage(obj) {
+		if (this.port) {
+			this.port.postMessage(obj);
+		}
+	},
+
+	checkExtensionUpdate() {
+		this.sendMessage({
+			extensionUpdated: this.extensionUpdated,
+		});
+	},
+
+	checkTimerLimitReached() {
+		chrome.storage.sync.get("time_limit_option", (obj) => {
+			if (
+				obj.time_limit_option &&
+				obj.time_limit_option * 60 <= this.time
+			) {
+				this.limitReached = true;
+				if (this.isRunning()) {
+					this.playReminderSound(true);
+					this.pause();
+				}
+			} else if (
+				this.time === 1800 ||
+				(this.time % 3600 === 0 && this.time !== 0)
+			) {
+				this.playReminderSound(true);
+			} else {
+				this.limitReached = false;
+			}
+			this.sendMessage({ timerLimitReached: this.limitReached });
+		});
+	},
+
+	updateIdle() {
+		chrome.storage.sync.get("idle", (obj) => {
+			if (obj.idle && obj.idle > 0) {
+				const idleSeconds = Math.max(15, obj.idle * 60);
+				chrome.idle.setDetectionInterval(idleSeconds);
+			}
+		});
+	},
+};
+
+// --- CHROME API EVENT LISTENERS ---
+chrome.runtime.onConnect.addListener((port) => {
+	timer.port = port;
+	port.onMessage.addListener((msg) => {
+		const callable_actions = [
+			"play",
+			"pause",
+			"stop",
+			"update",
+			"checkExtensionUpdate",
+			"checkTimerLimitReached",
+		];
+		if (msg.action && callable_actions.includes(msg.action)) {
+			timer[msg.action]();
+		}
+	});
+	port.onDisconnect.addListener(() => {
+		timer.port = null;
+	});
+});
+
+chrome.runtime.onInstalled.addListener((details) => {
+	if (details.reason == "update") {
+		timer.extensionUpdated = chrome.runtime.getManifest().version;
+	}
+	timer.updateIdle();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+	timer.syncInitialTime();
+	timer.updateIdle();
+});
+
+chrome.commands.onCommand.addListener((command) => {
+	if (command == "play_pause") {
+		timer.isRunning() ? timer.pause() : timer.play();
+	} else if (command == "stop") {
+		timer.stop();
+	}
+});
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+	if (changes.idle) {
+		timer.updateIdle();
+	}
+});
+
+chrome.idle.onStateChanged.addListener((state) => {
+	if (state === "idle" || state === "locked") {
+		if (timer.isRunning()) {
+			timer.pause();
+			timer.playReminderSound();
+		}
+	}
+});
+
+// --- INITIALIZATION ---
+timer.syncInitialTime();
+chrome.action.setBadgeBackgroundColor({ color: "#e74c3c" });
