@@ -1,5 +1,3 @@
-// --- START OF FILE background.js ---
-
 import { getCurrentFormattedTime, formatCurrentHumanTime } from "./helpers.js";
 
 // --- Offscreen helpers ---
@@ -227,3 +225,5 @@ chrome.idle.onStateChanged.addListener((state) => {
 // --- INITIALIZATION ---
 timer.syncInitialTime();
 chrome.action.setBadgeBackgroundColor({ color: "#e74c3c" });
+
+self.timer = timer;
